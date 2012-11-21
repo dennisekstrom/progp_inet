@@ -27,6 +27,10 @@ public class ATMServerThread extends Thread {
 		return true;
 	}
 
+	private void printMenu() {
+		out.println("Welcome to Bank! \n(1)Balance, \n(2)Withdrawal, \n(3)Deposit, \n(4)Exit\r");
+	}
+
 	public void run() {
 
 		try {
@@ -39,12 +43,12 @@ public class ATMServerThread extends Thread {
 			int balance = 1000;
 			int value;
 			validateUser();
-			out.println("Welcome to Bank! (1)Balance, (2)Withdrawal, (3)Deposit, (4)Exit");
+			printMenu();
 			inputLine = readLine();
-			int choise = Integer.parseInt(inputLine);
-			while (choise != 4) {
+			int choice = Integer.parseInt(inputLine);
+			while (choice != 4) {
 				int deposit = 1;
-				switch (choise) {
+				switch (choice) {
 				case 2:
 					deposit = -1;
 				case 3:
@@ -54,9 +58,9 @@ public class ATMServerThread extends Thread {
 					balance += deposit * value;
 				case 1:
 					out.println("Current balance is " + balance + " dollars");
-					out.println("(1)Balance, (2)Withdrawal, (3)Deposit, (4)Exit");
+					printMenu();
 					inputLine = readLine();
-					choise = Integer.parseInt(inputLine);
+					choice = Integer.parseInt(inputLine);
 					break;
 				case 4:
 					break;
