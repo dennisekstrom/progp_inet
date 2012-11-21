@@ -65,8 +65,9 @@ public class ATMServerThread extends Thread {
 
 			int balance = 1000;
 			int value;
+			int choice;
 			out.println(Language.setLanguage);
-			int choice = readIntFromClient();
+			choice = readIntFromClient();
 			switch (choice) {
 			case 1:
 				language = Language.ENG;
@@ -75,10 +76,9 @@ public class ATMServerThread extends Thread {
 				language = Language.SWE;
 				break;
 			default:
-
 				break;
 			}
-			validateUser();
+//			validateUser();
 			out.println(language.menu);
 			choice = readIntFromClient();
 			while (choice != 4) {

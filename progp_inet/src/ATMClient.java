@@ -56,11 +56,13 @@ public class ATMClient {
 		
 		// server requests language choice
 		printServerMsgWithNewlines(in);
-		int languageOption = getIntegerInput();
+		int languageOption = 1;
+		languageOption = getIntegerInput();
 		out.println(languageOption);
 		
 		// take action depending on menuOption
-		int menuOption, userInput;
+		int menuOption; 
+		int userInput;
 		do {
 			// server requests menu choice
 			printServerMsgWithNewlines(in);
