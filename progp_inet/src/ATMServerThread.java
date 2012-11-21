@@ -10,8 +10,7 @@ import java.net.Socket;
 public class ATMServerThread extends Thread {
 	private Socket socket = null;
 	private BufferedReader in;
-	PrintWriter out;
-	
+	private PrintWriter out;
 	private enum Language {
 		SWE, ENG
 	}
@@ -45,6 +44,13 @@ public class ATMServerThread extends Thread {
 			break;
 		}
 	}
+	
+	/**
+	 * @return integer input from client.
+	 */
+	private int readIntFromClient() throws IOException {
+		return Integer.parseInt(readLine());
+	}
 
 	public void run() {
 
@@ -58,8 +64,7 @@ public class ATMServerThread extends Thread {
 			int balance = 1000;
 			int value;
 			printSetLanguage();
-			inputLine = readLine();
-			int choice = Integer.parseInt(inputLine);
+			int choice = readIntFromClient();
 			switch (choice) {
 			case 1:
 				language = Language.ENG;
@@ -73,8 +78,7 @@ public class ATMServerThread extends Thread {
 			}
 			validateUser();
 			printMenu(language);
-			inputLine = readLine();
-			choice = Integer.parseInt(inputLine);
+			choice = readIntFromClient();
 			while (choice != 4) {
 				int deposit = 1;
 				switch (choice) {
@@ -82,14 +86,12 @@ public class ATMServerThread extends Thread {
 					deposit = -1;
 				case 3:
 					printEnterAmount(language);
-					inputLine = readLine();
-					value = Integer.parseInt(inputLine);
+					value = readIntFromClient();
 					balance += deposit * value;
 				case 1:
 					printCurrentBalance(balance, language);
 					printMenu(language);
-					inputLine = readLine();
-					choice = Integer.parseInt(inputLine);
+					choice = readIntFromClient();
 					break;
 				case 4:
 					break;

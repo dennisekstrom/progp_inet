@@ -17,7 +17,6 @@ public class ATMClient {
 		while ((c = in.read()) != '\r') {
 			System.out.print((char) c);
 		}
-
 		Scanner scanner = new Scanner(System.in);
 		System.out.print("\n> ");
 		return scanner.nextInt();
@@ -50,17 +49,11 @@ public class ATMClient {
 		}
 
 		System.out.println("Contacting bank ... ");
-		int c;
-		while ((c = in.read()) != '\r') {
-			System.out.print((char) c);
-		}
-
-		System.out.print("\n> ");
 		int menuOption = getMenuOption(in);
 		Scanner scanner = new Scanner(System.in);
 		int userInput;
 		out.println(menuOption);
-		while (menuOption < 4) {
+		while (menuOption != 4) {
 			switch (menuOption) {
 			case 1:
 				System.out.println(in.readLine());
@@ -84,15 +77,11 @@ public class ATMClient {
 				System.out.print("> ");
 				menuOption = scanner.nextInt();
 				out.println(menuOption);
-				break;				
+				break;
 			default:
+				menuOption = scanner.nextInt();
 				break;
 			}
-//			if (menuOption == 1) {
-//			} else if (menuOption > 3) {
-//				break;
-//			} else {
-//			}
 		}
 
 		out.close();
