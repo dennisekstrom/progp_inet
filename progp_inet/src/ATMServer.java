@@ -9,7 +9,7 @@ public class ATMServer {
     private static int connectionPort = 8989;
     
     public static void main(String[] args) throws IOException {
-        
+    	
         ServerSocket serverSocket = null;
        
         boolean listening = true;

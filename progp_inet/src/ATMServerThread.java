@@ -36,7 +36,7 @@ public class ATMServerThread extends Thread {
 			int balance = 1000;
 			int value;
 			validateUser();
-			out.println("Welcome to Bank! (1)Balance, (2)Withdrawal, (3)Deposit, (4)Exit");
+			out.println("Welcome to Bank! \n(1)Balance, \n(2)Withdrawal, \n(3)Deposit, \n(4)Exit");
 			inputLine = readLine();
 			int choise = Integer.parseInt(inputLine);
 			while (choise != 4) {
