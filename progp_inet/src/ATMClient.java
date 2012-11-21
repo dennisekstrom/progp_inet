@@ -12,12 +12,16 @@ import java.util.Scanner;
 public class ATMClient {
 	private static int connectionPort = 8989;
 
-	private static int getMenuOption(BufferedReader in) throws IOException {
+	private static Scanner scanner = new Scanner(System.in);
+	
+	private static void printServerMsgWithNewlines(BufferedReader in) throws IOException {
 		int c;
 		while ((c = in.read()) != '\r') {
 			System.out.print((char) c);
 		}
-		Scanner scanner = new Scanner(System.in);
+	}
+	
+	private static int getIntegerInput() {
 		System.out.print("\n> ");
 		return scanner.nextInt();
 	}
@@ -49,40 +53,33 @@ public class ATMClient {
 		}
 
 		System.out.println("Contacting bank ... ");
-		int menuOption = getMenuOption(in);
-		Scanner scanner = new Scanner(System.in);
-		int userInput;
-		out.println(menuOption);
-		while (menuOption != 4) {
+		
+		// server requests language choice
+		printServerMsgWithNewlines(in);
+		int languageOption = getIntegerInput();
+		out.println(languageOption);
+		
+		// take action depending on menuOption
+		int menuOption, userInput;
+		do {
+			// server requests menu choice
+			printServerMsgWithNewlines(in);
+			menuOption = getIntegerInput();
+			out.println(menuOption);
+			
 			switch (menuOption) {
 			case 1:
-				System.out.println(in.readLine());
-				System.out.println(in.readLine());
-				System.out.print("> ");
-				menuOption = scanner.nextInt();
-				out.println(menuOption);
-				
+				System.out.println(in.readLine());	// gets currentBalance msg from server
 				break;
 			case 2:
 				//$FALL-THROUGH$
 			case 3:
-				System.out.println(in.readLine());
-				userInput = scanner.nextInt();
+				System.out.println(in.readLine());	// gets enterAmount msg from server
+				userInput = getIntegerInput();
 				out.println(userInput);
-				String str;
-				do {
-					str = in.readLine();
-					System.out.println(str);
-				} while (!str.startsWith("(1)"));
-				System.out.print("> ");
-				menuOption = scanner.nextInt();
-				out.println(menuOption);
-				break;
-			default:
-				menuOption = scanner.nextInt();
 				break;
 			}
-		}
+		} while (menuOption != 4);
 
 		out.close();
 		in.close();
