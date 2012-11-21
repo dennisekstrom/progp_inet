@@ -10,7 +10,7 @@ import java.net.Socket;
 public class ATMServerThread extends Thread {
 	private Socket socket = null;
 	private BufferedReader in;
-	PrintWriter out;
+	private PrintWriter out;
 
 	public ATMServerThread(Socket socket) {
 		super("ATMServerThread");
@@ -30,6 +30,13 @@ public class ATMServerThread extends Thread {
 	private void printMenu() {
 		out.println("Welcome to Bank! \n(1)Balance, \n(2)Withdrawal, \n(3)Deposit, \n(4)Exit\r");
 	}
+	
+	/**
+	 * @return integer input from client.
+	 */
+	private int readIntFromClient() throws IOException {
+		return Integer.parseInt(readLine());
+	}
 
 	public void run() {
 
@@ -40,12 +47,10 @@ public class ATMServerThread extends Thread {
 
 			String inputLine, outputLine;
 
-			int balance = 1000;
-			int value;
+			int value, balance = 1000;
 			validateUser();
 			printMenu();
-			inputLine = readLine();
-			int choice = Integer.parseInt(inputLine);
+			int choice = readIntFromClient();
 			while (choice != 4) {
 				int deposit = 1;
 				switch (choice) {
@@ -53,14 +58,12 @@ public class ATMServerThread extends Thread {
 					deposit = -1;
 				case 3:
 					out.println("Enter amount: ");
-					inputLine = readLine();
-					value = Integer.parseInt(inputLine);
+					value = readIntFromClient();
 					balance += deposit * value;
 				case 1:
 					out.println("Current balance is " + balance + " dollars");
 					printMenu();
-					inputLine = readLine();
-					choice = Integer.parseInt(inputLine);
+					choice = readIntFromClient();
 					break;
 				case 4:
 					break;
