@@ -62,7 +62,7 @@ public class ATMServerThread extends Thread {
 
 			int balance = 1000;
 			int value;
-			printSetLanguage();
+			println(Language.setLanguage);
 			int choice = readIntFromClient();
 			switch (choice) {
 			case 1:
