@@ -1,5 +1,9 @@
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 /**
@@ -43,15 +47,18 @@ public class ATMClient {
 		int userInput;
 		out.println(menuOption);
 		while (menuOption < 4) {
-			if (menuOption == 1) {
+			switch (menuOption) {
+			case 1:
 				System.out.println(in.readLine());
 				System.out.println(in.readLine());
 				System.out.print("> ");
 				menuOption = scanner.nextInt();
 				out.println(menuOption);
-			} else if (menuOption > 3) {
+				
 				break;
-			} else {
+			case 2:
+				//$FALL-THROUGH$
+			case 3:
 				System.out.println(in.readLine());
 				userInput = scanner.nextInt();
 				out.println(userInput);
@@ -63,7 +70,15 @@ public class ATMClient {
 				System.out.print("> ");
 				menuOption = scanner.nextInt();
 				out.println(menuOption);
+				break;				
+			default:
+				break;
 			}
+//			if (menuOption == 1) {
+//			} else if (menuOption > 3) {
+//				break;
+//			} else {
+//			}
 		}
 
 		out.close();
