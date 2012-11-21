@@ -54,8 +54,8 @@ public class ATMServerThread extends Thread {
 		return Integer.parseInt(readLine());
 	}
 
+	@Override
 	public void run() {
-
 		try {
 			out = new PrintWriter(socket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(
@@ -73,9 +73,6 @@ public class ATMServerThread extends Thread {
 				break;
 			case 2:
 				language = Language.SWE;
-				break;
-			default:
-
 				break;
 			}
 			validateUser();

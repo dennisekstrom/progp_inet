@@ -10,7 +10,7 @@ import java.util.Scanner;
  * @author Snilledata
  */
 public class ATMClient {
-	private static int connectionPort = 8989;
+	private static int connectionPort = 8988;
 
 	private static Scanner scanner = new Scanner(System.in);
 	
