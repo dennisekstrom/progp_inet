@@ -56,11 +56,10 @@ public class ATMClient {
 		
 		// server requests language choice
 		printServerMsgWithNewlines(in);
-		int languageOption = getIntegerInput();
-		out.println(languageOption);
+		out.println(getIntegerInput());
 		
 		// take action depending on menuOption
-		int menuOption, userInput;
+		int menuOption;
 		do {
 			// server requests menu choice
 			printServerMsgWithNewlines(in);
@@ -75,8 +74,7 @@ public class ATMClient {
 				//$FALL-THROUGH$
 			case 3:
 				System.out.println(in.readLine());	// gets enterAmount msg from server
-				userInput = getIntegerInput();
-				out.println(userInput);
+				out.println(getIntegerInput());
 				break;
 			}
 		} while (menuOption != 4);
