@@ -106,7 +106,5 @@ public class ATMServerThread extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
-
 }
