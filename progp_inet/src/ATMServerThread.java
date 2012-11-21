@@ -18,7 +18,7 @@ public class ATMServerThread extends Thread {
 		ENG("Welcome to Bank!\n(1)Balance\n(2)Whitdraw\n(3)Deposit\n(4)Exit\r",
 				"Enter amount: ", "Current balance is %d dollars");
 
-		static String setLanguage = "Set language! Ange språk! \n(1)English \n(2)Svenska"; 
+		static String setLanguage = "Set language! Ange språk! \n(1)English \n(2)Svenska\r"; 
 		String menu;
 		String enterAmount;
 		String currentBalance;
