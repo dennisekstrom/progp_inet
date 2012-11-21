@@ -8,6 +8,17 @@ import java.util.Scanner;
 public class ATMClient {
 	private static int connectionPort = 8989;
 
+	private static int getMenuOption(BufferedReader in) throws IOException {
+		int c;
+		while ((c = in.read()) != '\r') {
+			System.out.print((char) c);
+		}
+
+		Scanner scanner = new Scanner(System.in);
+		System.out.print("\n> ");
+		return scanner.nextInt();
+	}
+
 	public static void main(String[] args) throws IOException {
 
 		Socket ATMSocket = null;
@@ -35,11 +46,14 @@ public class ATMClient {
 		}
 
 		System.out.println("Contacting bank ... ");
-		System.out.println(in.readLine());
+		int c;
+		while ((c = in.read()) != '\r') {
+			System.out.print((char) c);
+		}
 
+		System.out.print("\n> ");
+		int menuOption = getMenuOption(in);
 		Scanner scanner = new Scanner(System.in);
-		System.out.print("> ");
-		int menuOption = scanner.nextInt();
 		int userInput;
 		out.println(menuOption);
 		while (menuOption < 4) {
