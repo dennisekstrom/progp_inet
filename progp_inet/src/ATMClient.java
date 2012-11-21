@@ -13,14 +13,15 @@ public class ATMClient {
 	private static int connectionPort = 8988;
 
 	private static Scanner scanner = new Scanner(System.in);
-	
-	private static void printServerMsgWithNewlines(BufferedReader in) throws IOException {
+
+	private static void printServerMsgWithNewlines(BufferedReader in)
+			throws IOException {
 		int c;
 		while ((c = in.read()) != '\r') {
 			System.out.print((char) c);
 		}
 	}
-	
+
 	private static int getIntegerInput() {
 		System.out.print("\n> ");
 		return scanner.nextInt();
@@ -53,28 +54,29 @@ public class ATMClient {
 		}
 
 		System.out.println("Contacting bank ... ");
-		
+
 		// server requests language choice
 		printServerMsgWithNewlines(in);
 		out.println(getIntegerInput());
-		
 		// take action depending on menuOption
 		int menuOption;
 		do {
-			// server requests menu choice
+			// gets menu from server
 			printServerMsgWithNewlines(in);
 			menuOption = getIntegerInput();
-			out.println(menuOption);
-			
+			out.println(menuOption); // give back option entered by user
+
 			switch (menuOption) {
-			case 1:
-				System.out.println(in.readLine());	// gets currentBalance msg from server
-				break;
 			case 2:
 				//$FALL-THROUGH$
 			case 3:
-				System.out.println(in.readLine());	// gets enterAmount msg from server
+				// gets enterAmount msg from server
+				System.out.println(in.readLine());
+				// give back amount entered by user
 				out.println(getIntegerInput());
+			case 1:
+				// gets currentBalance msg from server
+				System.out.println(in.readLine());
 				break;
 			}
 		} while (menuOption != 4);

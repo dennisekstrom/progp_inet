@@ -13,12 +13,13 @@ public class ATMServerThread extends Thread {
 	private PrintWriter out;
 
 	private enum Language {
-		SWE("Välkommen till Bank!\n(1)Saldo\n(2)Uttag\n(3)Insättning\n(4)Avsluta\r",
-				"Ange belopp: ", "Nuvarande saldo är %d dollar"), 
-		ENG("Welcome to Bank!\n(1)Balance\n(2)Whitdraw\n(3)Deposit\n(4)Exit\r",
+		SWE(
+				"Välkommen till Bank!\n(1)Saldo\n(2)Uttag\n(3)Insättning\n(4)Avsluta\r",
+				"Ange belopp: ", "Nuvarande saldo är %d dollar"), ENG(
+				"Welcome to Bank!\n(1)Balance\n(2)Whitdraw\n(3)Deposit\n(4)Exit\r",
 				"Enter amount: ", "Current balance is %d dollars");
 
-		static String setLanguage = "Set language! Ange språk! \n(1)English \n(2)Svenska\r"; 
+		static String setLanguage = "Set language! Ange språk! \n(1)English \n(2)Svenska\r";
 		String menu;
 		String enterAmount;
 		String currentBalance;
@@ -76,10 +77,11 @@ public class ATMServerThread extends Thread {
 				language = Language.SWE;
 				break;
 			}
-//			validateUser();
-			out.println(language.menu);
-			choice = readIntFromClient();
-			while (choice != 4) {
+			// validateUser();
+			do {
+				out.println(language.menu);
+				choice = readIntFromClient();
+
 				int deposit = 1;
 				switch (choice) {
 				case 2:
@@ -90,15 +92,13 @@ public class ATMServerThread extends Thread {
 					balance += deposit * value;
 				case 1:
 					out.printf(language.currentBalance + "\n", balance);
-					out.println(language.menu);
-					choice = readIntFromClient();
 					break;
 				case 4:
 					break;
 				default:
 					break;
 				}
-			}
+			} while (choice != 4);
 			out.println("Good Bye");
 			out.close();
 			in.close();
