@@ -11,10 +11,22 @@ public class ATMServerThread extends Thread {
 	private Socket socket = null;
 	private BufferedReader in;
 	private PrintWriter out;
+
 	private enum Language {
-		SWE, ENG
+		SWE("skriv meny", "belopp", "nuvarance saldo Šr %d dollar"), 
+		ENG("skriv meny", "belopp", "nuvarance saldo Šr %d dollar");
+
+		String menu;
+		String enterAmount;
+		String currentBalance;
+
+		Language(String menu, String enterAmount, String currentBalance) {
+			this.menu = menu;
+			this.enterAmount = enterAmount;
+			this.currentBalance = currentBalance;
+		}
 	}
-	
+
 	private Language language;
 
 	public ATMServerThread(Socket socket) {
@@ -32,19 +44,6 @@ public class ATMServerThread extends Thread {
 		return true;
 	}
 
-	private void printMenu(Language language) {
-		switch (language) {
-		case ENG:
-			out.println("Welcome to Bank! \n(1)Balance, \n(2)Withdrawal, \n(3)Deposit, \n(4)Exit\r");			
-			break;
-		case SWE:
-			out.println("Välkommen till Bank! \n(1)Saldo, \n(2)Uttag, \n(3)Insättning, \n(4)Avsluta\r");
-			break;
-		default:
-			break;
-		}
-	}
-	
 	/**
 	 * @return integer input from client.
 	 */
@@ -73,11 +72,11 @@ public class ATMServerThread extends Thread {
 				language = Language.SWE;
 				break;
 			default:
-				
+
 				break;
 			}
 			validateUser();
-			printMenu(language);
+			out.println(language.menu);
 			choice = readIntFromClient();
 			while (choice != 4) {
 				int deposit = 1;
@@ -85,12 +84,12 @@ public class ATMServerThread extends Thread {
 				case 2:
 					deposit = -1;
 				case 3:
-					printEnterAmount(language);
+					out.println(language.enterAmount);
 					value = readIntFromClient();
 					balance += deposit * value;
 				case 1:
-					printCurrentBalance(balance, language);
-					printMenu(language);
+					out.printf(language.currentBalance + "\n", balance);
+					out.println(language.menu);
 					choice = readIntFromClient();
 					break;
 				case 4:
@@ -111,27 +110,5 @@ public class ATMServerThread extends Thread {
 
 	private void printSetLanguage() {
 		out.println("Set language! Ange språk! \n(1)English \n(2)Svenska");
-	}
-
-	private void printEnterAmount(Language language) {
-		switch (language) {
-		case ENG:
-			out.println("Enter amount: ");			
-			break;
-		case SWE:
-			out.println("Ange belopp: ");
-			break;
-		}
-	}
-
-	private void printCurrentBalance(int balance, Language language) {
-		switch (language) {
-		case ENG:
-			out.println("Current balance is " + balance + " dollars");			
-			break;
-		case SWE:
-			out.println("Nuvarande saldo är " + balance + " dollar");
-			break;
-		}
 	}
 }
