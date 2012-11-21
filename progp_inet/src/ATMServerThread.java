@@ -13,9 +13,10 @@ public class ATMServerThread extends Thread {
 	private PrintWriter out;
 
 	private enum Language {
-		SWE("skriv meny", "belopp", "nuvarance saldo Šr %d dollar"), 
-		ENG("skriv meny", "belopp", "nuvarance saldo Šr %d dollar");
+		SWE("skriv meny", "Ange belopp: ", "Nuvarande saldo är %d dollar"), 
+		ENG("skriv meny", "Enter amount: ", "Current balance is %d dollars");
 
+		static String setLanguage = "Set language! Ange språk! \n(1)English \n(2)Svenska"; 
 		String menu;
 		String enterAmount;
 		String currentBalance;
@@ -62,7 +63,7 @@ public class ATMServerThread extends Thread {
 
 			int balance = 1000;
 			int value;
-			printSetLanguage();
+//			printSetLanguage();
 			int choice = readIntFromClient();
 			switch (choice) {
 			case 1:
@@ -108,7 +109,4 @@ public class ATMServerThread extends Thread {
 
 	}
 
-	private void printSetLanguage() {
-		out.println("Set language! Ange språk! \n(1)English \n(2)Svenska");
-	}
 }
