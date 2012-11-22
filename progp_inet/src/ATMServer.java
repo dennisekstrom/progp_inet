@@ -1,6 +1,9 @@
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -17,10 +20,17 @@ public class ATMServer {
 		}
 	}
 	
-	String[] codeList = generateCodeList();
+//	List<String> codeList = generateCodeList();
+
+	ArrayList<String> codeList = generateCodeList();
 	
-	private static String[] generateCodeList() {
-		return null;
+	private static ArrayList<String> generateCodeList() {
+		ArrayList<String> s = new ArrayList<String>();
+		s.addAll(Arrays.asList(new String[] {"01","03","05","07","09"}));
+		for (int i = 11; i < 100; i+=2) {
+			s.add("" + i);
+		}
+		return s;
 	}
 
 	private int connectionPort = 8988;

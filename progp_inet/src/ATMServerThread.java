@@ -136,8 +136,10 @@ public class ATMServerThread extends Thread {
 	private boolean validateTransaction() throws IOException {
 		send(language.codeList);
 		String transactionCode = readLine();
-		
-		return true;
+		if(server.codeList.contains(transactionCode)) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -190,6 +192,7 @@ public class ATMServerThread extends Thread {
 						case 2:
 							deposit = -1;
 						case 3:
+							validateTransaction();
 							send(language.enterAmount);
 							value = readIntFromClient();
 							server.deposit(cardNumber, deposit * value);
