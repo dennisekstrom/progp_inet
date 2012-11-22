@@ -67,11 +67,15 @@ public class ATMServerThread extends Thread {
 		this.socket = socket;
 		this.server = server;
 	}
-
-	// public synchronized void setWelcomeMessage(String welcomeMessage) {
-	// this.welcomeMessage = welcomeMessage + "\n";
-	// }
-
+	
+	private void send() {
+		
+	}
+	
+	private void receive() {
+		
+	}
+	
 	private String readLine() throws IOException {
 		String str = in.readLine();
 		// System.out.println("" + socket + " : " + str);
