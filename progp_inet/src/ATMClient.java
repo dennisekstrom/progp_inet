@@ -23,12 +23,16 @@ public class ATMClient {
 		in.read();
 	}
 
-	private void send(String s) {
-		
+	private void send(String msg) {
 	}
 	
-	private String receive() {
-		return "";
+	private String receive(BufferedReader in) throws IOException {
+		String s = "";
+		char c;
+		while((c = (char) in.read()) != '\0' ) {
+			s = s + c;
+		}
+		return s;
 	}
 	
 	private static int getIntegerInput() {
