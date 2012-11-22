@@ -16,6 +16,12 @@ public class ATMServer {
 			this.balance = balance;
 		}
 	}
+	
+	String[] codeList = generateCodeList();
+	
+	private static String[] generateCodeList() {
+		return null;
+	}
 
 	private int connectionPort = 8988;
 	private volatile String welcomeMessage = "Welcome to Bank!";

@@ -47,7 +47,9 @@ public class ATMClient {
 	private static String receive() throws IOException {
 		String s = "";
 		char c;
+		System.out.println("hej");
 		while ((c = (char) in.read()) != '\0') {
+			System.out.println("hej");
 			s = s + c;
 		}
 		return s;
