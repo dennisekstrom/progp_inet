@@ -23,6 +23,14 @@ public class ATMClient {
 		in.read();
 	}
 
+	private void send(String s) {
+		
+	}
+	
+	private String receive() {
+		return "";
+	}
+	
 	private static int getIntegerInput() {
 		System.out.print("\n> ");
 		return scanner.nextInt();
