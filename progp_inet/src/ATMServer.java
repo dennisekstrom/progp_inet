@@ -11,25 +11,6 @@ import java.util.Scanner;
 public class ATMServer {
 
 	private ArrayList<String> codeList = generateCodeList();
-
-	class AccountInfo {
-		int loginCode, balance;
-
-		AccountInfo(int loginCode, int balance) {
-			this.loginCode = loginCode;
-			this.balance = balance;
-		}
-	}
-
-	private static ArrayList<String> generateCodeList() {
-		ArrayList<String> s = new ArrayList<String>();
-		s.addAll(Arrays.asList(new String[] { "01", "03", "05", "07", "09" }));
-		for (int i = 11; i < 100; i += 2) {
-			s.add("" + i);
-		}
-		return s;
-	}
-
 	private int connectionPort = 8988;
 	private volatile String welcomeMessage = "Welcome to Bank!";
 	private volatile HashMap<Long, AccountInfo> accounts = new HashMap<Long, AccountInfo>();
@@ -48,7 +29,7 @@ public class ATMServer {
 				System.out.println("Server administraion menu:");
 				System.out.println("(1) Add account");
 				System.out.println("(2) Remove account");
-				System.out.println("(3) Set welcome message");
+				System.out.println("(3) Set welcome message\n> ");
 
 				// get administrator choice
 				choice = Integer.parseInt(scanner.nextLine());
@@ -56,7 +37,7 @@ public class ATMServer {
 				switch (choice) {
 				case 1:
 					// prompt for account info
-					System.out.print("Card number: \n> ");
+					System.out.println("Card number: \n> ");
 					id = Long.parseLong(scanner.nextLine());
 
 					// print message and return if card number unavailable
@@ -93,6 +74,24 @@ public class ATMServer {
 		}
 	};
 
+	class AccountInfo {
+		int loginCode, balance;
+
+		AccountInfo(int loginCode, int balance) {
+			this.loginCode = loginCode;
+			this.balance = balance;
+		}
+	}
+
+	private static ArrayList<String> generateCodeList() {
+		ArrayList<String> s = new ArrayList<String>();
+		s.addAll(Arrays.asList(new String[] { "01", "03", "05", "07", "09" }));
+		for (int i = 11; i < 100; i += 2) {
+			s.add("" + i);
+		}
+		return s;
+	}
+
 	private ATMServer() throws IOException {
 		ServerSocket serverSocket = null;
 
@@ -123,7 +122,7 @@ public class ATMServer {
 	public HashMap<Long, AccountInfo> getAccounts() {
 		return accounts;
 	}
-	
+
 	public ArrayList<String> getCodeList() {
 		return codeList;
 	}
