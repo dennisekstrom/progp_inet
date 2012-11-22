@@ -72,8 +72,13 @@ public class ATMServerThread extends Thread {
 		
 	}
 	
-	private void receive() {
-		
+	private String receive() throws Exception {
+		String s = "";
+		char c;
+		while((c = (char) in.read()) != '\0' ) {
+			s = s + c;
+		}
+		return s;
 	}
 	
 	private String readLine() throws IOException {
