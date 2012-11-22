@@ -66,6 +66,7 @@ public class ATMClient {
 		int c;
 		while ((c = in.read()) != -1) {
 			s = s + (char) c;
+
 		}
 		return s;
 	}

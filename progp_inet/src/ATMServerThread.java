@@ -28,7 +28,8 @@ public class ATMServerThread extends Thread {
 				"Inloggningskod: ",
 				"Inloggad med kortnr: %d", 
 				"Fel kortnummer eller inloggningskod.",
-				"Dina tre fšrsšk har fšrbrukats."),
+				"Dina tre fšrsšk har fšrbrukats.",
+				"Ange transaktionskod från kodlista."),
 		ENG("(1) Balance\n(2) Whitdraw\n(3) Deposit\n(4) Exit",
 				"Enter amount: ", 
 				"Current balance is %d dollars",
@@ -36,7 +37,8 @@ public class ATMServerThread extends Thread {
 				"Login code: ",
 				"Logged in with card number: %d",
 				"Wrong user name or login code.",
-				"Your three attempts to log in failed.");
+				"Your three attempts to log in failed.",
+				"Enter transaction code from code list.");
 		//@formatter:on
 
 		static String setLanguage = "Set language! Ange sprŒk! \n(1)English \n(2)Svenska";
@@ -48,10 +50,12 @@ public class ATMServerThread extends Thread {
 		String successfulLogin;
 		String unsuccessfulLogin;
 		String threeTriesExpired;
+		String codeList;
 
 		Language(String menu, String enterAmount, String currentBalance,
 				String cardNumber, String loginCode, String successfulLogin,
-				String unsuccessfulLogin, String threeTriesExpired) {
+				String unsuccessfulLogin, String threeTriesExpired,
+				String codeList) {
 			this.menu = menu;
 			this.enterAmount = enterAmount;
 			this.currentBalance = currentBalance;
@@ -60,6 +64,7 @@ public class ATMServerThread extends Thread {
 			this.successfulLogin = successfulLogin;
 			this.unsuccessfulLogin = unsuccessfulLogin;
 			this.threeTriesExpired = threeTriesExpired;
+			this.codeList = codeList;
 		}
 	}
 
@@ -131,6 +136,15 @@ public class ATMServerThread extends Thread {
 		}
 	}
 
+	private boolean validateTransaction() throws IOException {
+		send(language.codeList);
+		String transactionCode = readLine();
+		if (server.getCodeList().contains(transactionCode)) {
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	public void run() {
 		try {
@@ -181,6 +195,7 @@ public class ATMServerThread extends Thread {
 						case 2:
 							deposit = -1;
 						case 3:
+							validateTransaction();
 							send(language.enterAmount);
 							value = readIntFromClient();
 							server.deposit(cardNumber, deposit * value);
