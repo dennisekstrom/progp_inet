@@ -20,11 +20,17 @@ public class ATMClient {
 		while ((c = in.read()) != '\r') {
 			System.out.print((char) c);
 		}
+		in.read();
 	}
 
 	private static int getIntegerInput() {
 		System.out.print("\n> ");
 		return scanner.nextInt();
+	}
+
+	private static long getLongInput() {
+		System.out.print("\n> ");
+		return scanner.nextLong();
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -54,36 +60,72 @@ public class ATMClient {
 		}
 
 		System.out.println("Contacting bank ... ");
+		try {
+			while (true) {
+				int languageOption;
+				do {
+					// server requests language choice
+					printServerMsgWithNewlines(in);
+					languageOption = getIntegerInput();
+					out.println(languageOption);
+				} while (languageOption < 1 || 2 < languageOption);
 
-		// server requests language choice
-		printServerMsgWithNewlines(in);
-		out.println(getIntegerInput());
+				// take action depending on login action
+				// user is given three tries to log in
+				boolean loginOK = false;
+				String serverMsg;
+				for (int i = 0; !loginOK && i < 3; i++) {
+					serverMsg = in.readLine();
 
-		// take action depending on menuOption
-		int menuOption;
-		do {
-			// gets menu from server
-			printServerMsgWithNewlines(in);
-			menuOption = getIntegerInput();
-			out.println(menuOption); // give back option entered by user
+					loginOK = serverMsg.equals(ATMServerThread.LOGIN_OK);
+					if (loginOK)
+						break;
 
-			switch (menuOption) {
-			case 2:
-				//$FALL-THROUGH$
-			case 3:
-				// gets enterAmount msg from server
-				System.out.println(in.readLine());
-				// give back amount entered by user
-				out.println(getIntegerInput());
-			case 1:
-				// gets currentBalance msg from server
-				System.out.println(in.readLine());
-				break;
+					// server requests user name
+					System.out.println(serverMsg);
+					out.println(getLongInput());
+
+					// server requests login code
+					System.out.println(in.readLine());
+					out.println(getLongInput());
+
+					// server sends message about login
+					System.out.println(in.readLine());
+				}
+
+				if (loginOK) {
+					// take action depending on menuOption
+					int menuOption;
+					do {
+						// server requests menu choice
+						System.out.println(in.readLine());
+						printServerMsgWithNewlines(in);
+						menuOption = getIntegerInput();
+						out.println(menuOption); // return choice to server
+
+						switch (menuOption) {
+						case 2:
+							//$FALL-THROUGH$
+						case 3:
+							// servers requests amount entry
+							System.out.print(in.readLine());
+							out.println(getIntegerInput()); // return amount to
+															// server
+						case 1:
+							// servers sends current balance message
+							System.out.println(in.readLine());
+							break;
+						}
+					} while (menuOption != 4);
+				} else {
+					// server sends something about 3 tries used
+					System.out.println(in.readLine());
+				}
 			}
-		} while (menuOption != 4);
-
-		out.close();
-		in.close();
-		ATMSocket.close();
+		} catch (Exception e) {
+			out.close();
+			in.close();
+			ATMSocket.close();
+		}
 	}
 }
