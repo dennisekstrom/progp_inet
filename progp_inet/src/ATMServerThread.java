@@ -12,7 +12,7 @@ import java.util.LinkedList;
 public class ATMServerThread extends Thread {
 
 	public static final String LOGIN_OK = "LOGIN_OK";
-	private static final int BYTES_PER_PACKAGE = 5;
+	public static final int BYTES_PER_PACKAGE = 5;
 
 	private Socket socket = null;
 	private BufferedReader in;
@@ -23,7 +23,7 @@ public class ATMServerThread extends Thread {
 
 	private enum Language {
 		//@formatter:off
-		SWE("(1) Saldo\n(2) Uttag\n(3) Insättning\n(4) Avsluta\r", 
+		SWE("(1) Saldo\n(2) Uttag\n(3) Insättning\n(4) Avsluta", 
 				"Ange belopp: ",
 				"Nuvarande saldo är %d dollar",
 				"Kortnummer: ",
@@ -31,7 +31,7 @@ public class ATMServerThread extends Thread {
 				"Inloggad med kortnr: %d", 
 				"Fel kortnummer eller inloggningskod.",
 				"Dina tre försök har förbrukats."),
-		ENG("(1) Balance\n(2) Whitdraw\n(3) Deposit\n(4) Exit\r",
+		ENG("(1) Balance\n(2) Whitdraw\n(3) Deposit\n(4) Exit",
 				"Enter amount: ", 
 				"Current balance is %d dollars",
 				"Card number: ",
@@ -83,14 +83,17 @@ public class ATMServerThread extends Thread {
 			out.print(p);
 	}
 
-	private void receive() {
-
+	private String receive() throws IOException {
+		String s = "";
+		char c;
+		while ((c = (char) in.read()) != '\0') {
+			s = s + c;
+		}
+		return s;
 	}
 
 	private String readLine() throws IOException {
-		String str = in.readLine();
-		// System.out.println("" + socket + " : " + str);
-		return str;
+		return receive();
 	}
 
 	/**
