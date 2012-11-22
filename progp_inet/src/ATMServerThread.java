@@ -3,8 +3,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Arrays;
-import java.util.LinkedList;
 
 /**
  * @author Viebrapadata
@@ -76,15 +74,15 @@ public class ATMServerThread extends Thread {
 	}
 
 	private void send(String msg) {
-		LinkedList<String> packages = new LinkedList<String>(Arrays.asList(msg
-				.split(".{5}")));
-		if (packages.getLast().length() == BYTES_PER_PACKAGE)
-			packages.add("\0");
-		else
-			packages.addLast(packages.removeLast() + "\0");
-
-		for (String p : packages)
-			out.print(p);
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < msg.length(); i++) {
+			sb.append(msg.charAt(i));
+			if (sb.length() == 5) {
+				out.print(sb);
+				sb = new StringBuilder();
+			}
+		}
+		out.print(sb + "\0");
 	}
 
 	private String receive() throws IOException {

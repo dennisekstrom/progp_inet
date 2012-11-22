@@ -4,8 +4,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.Scanner;
 
 /**
@@ -13,11 +11,11 @@ import java.util.Scanner;
  */
 public class ATMClient {
 	private static int connectionPort = 8988;
-	private static Scanner scanner = new Scanner(System.in);
-	private static Socket ATMSocket = null;
-	private static PrintWriter out = null;
-	private static BufferedReader in = null;
-	private static String adress = "";
+	private Scanner scanner = new Scanner(System.in);
+	private Socket ATMSocket = null;
+	private PrintWriter out = null;
+	private BufferedReader in = null;
+	private String adress = "";
 
 	// private static void printServerMsgWithNewlines(BufferedReader in)
 	// throws IOException {
@@ -28,50 +26,54 @@ public class ATMClient {
 	// in.read();
 	// }
 
-	private static void send(Number num) {
+	private ATMClient(String adress) throws IOException {
+		this.adress = adress;
+		runClient();
+	}
+
+	private void send(Number num) {
 		send("" + num);
 	}
 
-	private static void send(String msg) {
-		LinkedList<String> packages = new LinkedList<String>(Arrays.asList(msg
-				.split(".{5}")));
-		if (packages.getLast().length() == ATMServerThread.BYTES_PER_PACKAGE)
-			packages.add("\0");
-		else
-			packages.addLast(packages.removeLast() + "\0");
-
-		for (String p : packages)
-			out.print(p);
+	private void send(String msg) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < msg.length(); i++) {
+			sb.append(msg.charAt(i));
+			if (sb.length() == 5) {
+				out.print(sb);
+				sb = new StringBuilder();
+			}
+		}
+		out.print(sb + "\0");
 	}
 
-	private static String receive() throws IOException {
+	private String receive() throws IOException {
 		String s = "";
 		char c;
-		System.out.println("hej");
+		System.out.println("fšre");
+		System.out.println(in.read());
+		System.out.println("efter");
 		while ((c = (char) in.read()) != '\0') {
 			System.out.println("hej");
 			s = s + c;
+			System.out.println("hej");
 		}
+		System.out.println("hej2");
 		return s;
 	}
 
-	private static int getIntegerInput() {
+	private int getIntegerInput() {
 		System.out.print("\n> ");
 		return scanner.nextInt();
 	}
 
-	private static long getLongInput() {
+	private long getLongInput() {
 		System.out.print("\n> ");
 		return scanner.nextLong();
 	}
 
-	public static void main(String[] args) throws IOException {
-		try {
-			adress = args[0];
-		} catch (ArrayIndexOutOfBoundsException e) {
-			System.err.println("Missing argument ip-adress");
-			System.exit(1);
-		}
+	public void runClient() throws IOException {
+
 		try {
 			ATMSocket = new Socket(adress, connectionPort);
 			out = new PrintWriter(ATMSocket.getOutputStream(), true);
@@ -153,6 +155,15 @@ public class ATMClient {
 			out.close();
 			in.close();
 			ATMSocket.close();
+		}
+	}
+
+	public static void main(String[] args) throws IOException {
+		try {
+			new ATMClient(args[0]);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			System.err.println("Missing argument ip-adress");
+			System.exit(1);
 		}
 	}
 }
