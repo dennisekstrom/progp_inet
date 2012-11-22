@@ -3,6 +3,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.LinkedList;
 
 /**
  * @author Viebrapadata
@@ -10,6 +12,7 @@ import java.net.Socket;
 public class ATMServerThread extends Thread {
 
 	public static final String LOGIN_OK = "LOGIN_OK";
+	private static final int BYTES_PER_PACKAGE = 5;
 
 	private Socket socket = null;
 	private BufferedReader in;
@@ -67,15 +70,23 @@ public class ATMServerThread extends Thread {
 		this.socket = socket;
 		this.server = server;
 	}
-	
-	private void send() {
-		
+
+	private void send(String msg) {
+		LinkedList<String> packages = new LinkedList<String>(Arrays.asList(msg
+				.split(".{5}")));
+		if (packages.getLast().length() == BYTES_PER_PACKAGE)
+			packages.add("\0");
+		else
+			packages.addLast(packages.removeLast() + "\0");
+
+		for (String p : packages)
+			out.print(p);
 	}
-	
+
 	private void receive() {
-		
+
 	}
-	
+
 	private String readLine() throws IOException {
 		String str = in.readLine();
 		// System.out.println("" + socket + " : " + str);
@@ -98,21 +109,21 @@ public class ATMServerThread extends Thread {
 
 	private boolean validateUser() throws IOException {
 		// request card number
-		out.println(language.cardNumber);
+		send(language.cardNumber);
 		long cardNumber = readLongFromClient();
 
 		// request security code
-		out.println(language.loginCode);
+		send(language.loginCode);
 		int loginCode = readIntFromClient();
 
 		ATMServer.AccountInfo ai = server.getAccounts().get(cardNumber);
 		if (ai != null && ai.loginCode == loginCode) {
 			this.cardNumber = cardNumber;
-			out.printf(language.successfulLogin + " " + language.currentBalance
-					+ "\n", cardNumber, ai.balance);
+			send(String.format(language.successfulLogin + " "
+					+ language.currentBalance + "\n", cardNumber, ai.balance));
 			return true;
 		} else {
-			out.println(language.unsuccessfulLogin);
+			send(language.unsuccessfulLogin);
 			return false;
 		}
 	}
@@ -129,7 +140,7 @@ public class ATMServerThread extends Thread {
 				String preMsgInfo = "";
 				do {
 					// request language choice
-					out.println(preMsgInfo + Language.setLanguage);
+					send(preMsgInfo + Language.setLanguage);
 					choice = readIntFromClient();
 
 					switch (choice) {
@@ -153,13 +164,13 @@ public class ATMServerThread extends Thread {
 
 				if (loginOK) {
 					// inform client that login was OK
-					out.println(LOGIN_OK);
+					send(LOGIN_OK);
 
 					preMsgInfo = "";
 					do {
 						// request menu choice
-						out.println(preMsgInfo + server.getWelcomeMessage()
-								+ "\n" + language.menu);
+						send(preMsgInfo + server.getWelcomeMessage() + "\n"
+								+ language.menu);
 						choice = readIntFromClient();
 
 						int deposit = 1;
@@ -167,12 +178,12 @@ public class ATMServerThread extends Thread {
 						case 2:
 							deposit = -1;
 						case 3:
-							out.println(language.enterAmount);
+							send(language.enterAmount);
 							value = readIntFromClient();
 							server.deposit(cardNumber, deposit * value);
 						case 1:
-							out.printf(language.currentBalance + "\n",
-									server.getBalance(cardNumber));
+							send(String.format(language.currentBalance + "\n",
+									server.getBalance(cardNumber)));
 							preMsgInfo = "";
 							break;
 						default:
@@ -181,13 +192,13 @@ public class ATMServerThread extends Thread {
 						}
 					} while (choice != 4);
 
-					out.println("Good Bye");
+					send("Good Bye");
 
 					out.close();
 					in.close();
 					socket.close();
 				} else {
-					out.println(language.threeTriesExpired);
+					send(language.threeTriesExpired);
 				}
 			}
 		} catch (IOException e) {
