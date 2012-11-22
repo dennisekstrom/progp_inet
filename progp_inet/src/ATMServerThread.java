@@ -39,7 +39,7 @@ public class ATMServerThread extends Thread {
 				"Your three attempts to log in failed.");
 		//@formatter:on
 
-		static String setLanguage = "Set language! Ange språk! \n(1)English \n(2)Svenska\r";
+		static String setLanguage = "Set language! Ange språk! \n(1)English \n(2)Svenska";
 		String menu;
 		String enterAmount;
 		String currentBalance;
@@ -74,11 +74,13 @@ public class ATMServerThread extends Thread {
 		for (int i = 0; i < msg.length(); i++) {
 			sb.append(msg.charAt(i));
 			if (sb.length() == 5) {
-				out.print(sb);
+				out.print(sb.toString());
+				System.out.println("SENT: " + sb);
 				sb = new StringBuilder();
 			}
 		}
-		out.print(sb + "\0");
+		out.print(sb.toString());
+		System.out.println("SENT: " + sb);
 	}
 
 	private String receive() throws IOException {
