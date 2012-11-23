@@ -39,35 +39,26 @@ public class ATMClient {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < msg.length(); i++) {
 			sb.append(msg.charAt(i));
-			if (sb.length() == 4) {
-				out.print(sb + "\n");
+			if (sb.length() == 5) {
+				out.print(sb);
 				sb = new StringBuilder();
 			}
 		}
-		out.print(sb + "\n\0");
+		out.print(sb + "\0");
 	}
-
-	// private String receive() throws IOException {
-	// String s = "";
-	// System.out.println("1");
-	// boolean hasNext = true;
-	// do {
-	// String str = in.readLine();
-	// if (str.charAt(str.length() - 1) == '\0')
-	// hasNext = false;
-	// else
-	// s += str;
-	// } while (hasNext);
-	// return s;
-	// }
 
 	private String receive() throws IOException {
 		String s = "";
-		int c;
-		while ((c = in.read()) != -1) {
-			s = s + (char) c;
-
+		char c;
+		System.out.println("fšre");
+		System.out.println(in.read());
+		System.out.println("efter");
+		while ((c = (char) in.read()) != '\0') {
+			System.out.println("hej");
+			s = s + c;
+			System.out.println("hej");
 		}
+		System.out.println("hej2");
 		return s;
 	}
 
@@ -168,7 +159,6 @@ public class ATMClient {
 	}
 
 	public static void main(String[] args) throws IOException {
-
 		try {
 			new ATMClient(args[0]);
 		} catch (ArrayIndexOutOfBoundsException e) {

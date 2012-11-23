@@ -41,7 +41,7 @@ public class ATMServerThread extends Thread {
 				"Enter transaction code from code list.");
 		//@formatter:on
 
-		static String setLanguage = "Set language! Ange språk! \n(1)English \n(2)Svenska";
+		static String setLanguage = "Set language! Ange språk! \n(1)English \n(2)Svenska\r";
 		String menu;
 		String enterAmount;
 		String currentBalance;
@@ -54,8 +54,7 @@ public class ATMServerThread extends Thread {
 
 		Language(String menu, String enterAmount, String currentBalance,
 				String cardNumber, String loginCode, String successfulLogin,
-				String unsuccessfulLogin, String threeTriesExpired,
-				String codeList) {
+				String unsuccessfulLogin, String threeTriesExpired, String codeList) {
 			this.menu = menu;
 			this.enterAmount = enterAmount;
 			this.currentBalance = currentBalance;
@@ -79,13 +78,11 @@ public class ATMServerThread extends Thread {
 		for (int i = 0; i < msg.length(); i++) {
 			sb.append(msg.charAt(i));
 			if (sb.length() == 5) {
-				out.print(sb.toString());
-				System.out.println("SENT: " + sb);
+				out.print(sb);
 				sb = new StringBuilder();
 			}
 		}
-		out.print(sb.toString());
-		System.out.println("SENT: " + sb);
+		out.print(sb + "\0");
 	}
 
 	private String receive() throws IOException {
@@ -135,11 +132,11 @@ public class ATMServerThread extends Thread {
 			return false;
 		}
 	}
-
+	
 	private boolean validateTransaction() throws IOException {
 		send(language.codeList);
 		String transactionCode = readLine();
-		if (server.getCodeList().contains(transactionCode)) {
+		if(server.getCodeList().contains(transactionCode)) {
 			return true;
 		}
 		return false;
